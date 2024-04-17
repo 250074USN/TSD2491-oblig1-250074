@@ -1,8 +1,36 @@
-﻿@{
+﻿@model List<string>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">TSD2491 – Oblig1</h1>
-</div>
+<head>
+    <style>
+        .container {
+            width: 400px;
+        }
 
+        .emoji-button {
+            width: 100px;
+            height: 100px;
+            font-size: 50px; /* Adjust this value to make the emoji larger or smaller */
+        }
+    </style>
+</head>
+
+<div class="text-center">
+    <h1 class="display-4">TSD2491-Oblig1.</h1>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var emoji in Model)
+            {
+                <div class="col-3">
+                    <button class="btn btn-outline-dark emoji-button">
+                        @emoji
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
