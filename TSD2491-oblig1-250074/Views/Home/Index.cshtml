@@ -1,4 +1,4 @@
-﻿@model List<string>
+﻿@model TSD2491_OBLIG1_250074.Models.MatchingGameModul
 
 @{
     ViewData["Title"] = "Home Page";
@@ -13,7 +13,7 @@
         .emoji-button {
             width: 100px;
             height: 100px;
-            font-size: 50px; 
+            font-size: 50px;
         }
     </style>
 </head>
@@ -23,14 +23,25 @@
 
     <div class="container">
         <div class="row">
-            @foreach (var emoji in Model)
+            @for (var animalNumber = 0; animalNumber < Model.ShuffledEmoji.Count; animalNumber++)
             {
+                var animal = Model.ShuffledEmoji[animalNumber];
+                var uniqueDescription = $"Button #{animalNumber}";
                 <div class="col-3">
-                    <button class="btn btn-outline-dark emoji-button">
-                        @emoji
-                    </button>
+                    @using (Html.BeginForm("ButtonClick", "Home", FormMethod.Post))
+                    {
+                        <input type="hidden" name="animal" value="@animal" />
+                        <input type="hidden" name="description" value="@uniqueDescription" />
+                        <button type="submit" class="btn btn-outline-dark emoji-button">
+                            <h1>@animal</h1>
+                        </button>
+                    }
                 </div>
             }
         </div>
+    </div>
+
+    <div class="row">
+        <h2>Match Found: @Model.MatchesFound</h2>
     </div>
 </div>

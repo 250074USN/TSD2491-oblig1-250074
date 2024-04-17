@@ -10,8 +10,15 @@ namespace TSD2491_oblig1_250074.Controllers
 
         public IActionResult Index()
         {
-            var shuffledEmojiList = _matchingGameModel.ShuffledEmoji;
-            return View(shuffledEmojiList);
+            return View(_matchingGameModel);
+        }
+
+        [HttpPost]
+        public IActionResult ButtonClick(string animal, string description)
+        {
+            _matchingGameModel.ButtonClick(animal, description);
+
+            return RedirectToAction("Index");
         }
     }
 }
