@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TSD2491_OBLIG1_250074.Models
 {
     public class MatchingGameModul
     {
-        public MatchingGameModul()
-        {
-        }
-
+       
+        static Random random = new Random();
         static List<string> animalEmoji = new List<string>()
         {
             "🐶", "🐶", // dog
@@ -22,5 +21,16 @@ namespace TSD2491_OBLIG1_250074.Models
         };
 
         public List<string> AnimalEmoji { get { return animalEmoji; } }
+        public List<string> ShuffledEmoji { get; private set; }
+
+        public MatchingGameModul()
+        {
+            ShuffledEmoji = ShuffleEmoji(animalEmoji);
+        }
+
+        private List<string> ShuffleEmoji(List<string> emojis)
+        {
+            return emojis.OrderBy(e => random.Next()).ToList();
+        }
     }
 }
