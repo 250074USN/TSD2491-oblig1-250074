@@ -9,10 +9,17 @@ namespace TSD2491_OBLIG1_250074.Models
     {
 
         public int MatchesFound = 0;
-        public string gameStatus { get; private set; }       
+        public string gameStatus { get; private set; }
+
+        // legger til en List<User> for a lagre brukerinformasjon
+        public List<User> Users { get; private set; } = new List<User>();
+
+        public string CurrentUsername { get; private set; }
 
         public MatchingGameModul()
         {
+            // initialiserer Users-listen i konstruktoren 
+            Users = new List<User>();
             SetupGame();
         }
 
@@ -33,43 +40,44 @@ namespace TSD2491_OBLIG1_250074.Models
             "👈", "👈", 
 			"✌️", "✌️",	
 			"🖖", "🖖",  
-			"🤞", "🤞", 
+			"🤞", "🤞",  
 			"👎", "👎", 
 			"🤌", "🤌", 
 			"👍", "👍",  
 			"🤝", "🤝", 
 		};
-
-        static List<string> coolEmoji = new List<string>()
+ 
+        static List<string> randomEmoji = new List<string>()
         {
             "🎃", "🎃", 
 			"❌", "❌", 
 			"⚡", "⚡", 
-			"🚀", "🚀", 
-			"🚁", "🚁", 
+			"🚀", "🚀",
+			"🚁", "🚁",
 			"📸", "📸", 
-			"🧲", "🧲", 
-			"✂️", "✂️",	
+			"🧲", "🧲",  
+			"✂️", "✂️",	 
 
 		};
 
-        static List<string> fruitEmoji = new List<string>()
+        static List<string> fruktEmoji = new List<string>()
         {
             "🍒", "🍒", 
-            "🍑", "🍑", 
+            "🍑", "🍑",  
             "🍉", "🍉", 
             "🥝", "🥝", 
             "🍌", "🍌", 
             "🍎", "🍎", 
-            "🥥", "🥥", 
+            "🥥", "🥥",  
             "🍇", "🍇", 
         };
+
 
         static Random random = new Random();
         public List<string> shuffledEmoji = pickRandomEmoji();
         static List<string> pickRandomEmoji()
         {
-            
+ 
             int randomIndeks = random.Next(0, 4);
 
             switch (randomIndeks)
@@ -81,20 +89,22 @@ namespace TSD2491_OBLIG1_250074.Models
                     return signEmoji = signEmoji.OrderBy(items => random.Next()).ToList();
 
                 case 2:
-                    return coolEmoji = coolEmoji.OrderBy(items => random.Next()).ToList();
+                    return randomEmoji = randomEmoji.OrderBy(items => random.Next()).ToList();
 
                 case 3:
-                    return fruitEmoji = fruitEmoji.OrderBy(items => random.Next()).ToList();
+                    return fruktEmoji = fruktEmoji.OrderBy(items => random.Next()).ToList();
 
                 default:
                     throw new Exception("Invalig Index");
             }
         }
 
+        // commit 4
         private void SetupGame()
         {
             Random random = new Random();
             shuffledEmoji = pickRandomEmoji();
+
             MatchesFound = 0;
         }
 
@@ -103,6 +113,10 @@ namespace TSD2491_OBLIG1_250074.Models
 
         public void ButtonClick(string animal, string AnimalDescription)
         {
+
+            if (CurrentUsername == null)
+                return;
+
             if (MatchesFound == 0)
             {
                 gameStatus = "Game Running";
@@ -130,13 +144,46 @@ namespace TSD2491_OBLIG1_250074.Models
                     gameStatus = "Game Complete";
                     SetupGame();
 
+                    if (CurrentUsername != null)
+                    {
+                        UpdateGamesPlayed(CurrentUsername);
+                    }
+
+                    SetupGame();
                 }
             }
 
             else
             {
+                // resetting lastAnimalFound
                 lastAnimalFound = string.Empty;
             }
         }
+
+        public void RegisterUser(string username)
+        {
+            if (!Users.Any(u => u.Username == username))
+            {
+                Users.Add(new User { Username = username, GamesPlayed = 0 });
+            }
+
+            CurrentUsername = username;
+
+        }
+
+        public void UpdateGamesPlayed(string username)
+        {
+            var user = Users.FirstOrDefault(u => u.Username == username);
+            if (user != null)
+            {
+                user.GamesPlayed++;
+            }
+        }
+    }
+
+    public class User
+    {
+        public string Username { get; set; }
+        public int GamesPlayed { get; set; }
     }
 }
