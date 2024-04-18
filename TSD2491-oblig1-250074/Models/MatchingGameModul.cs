@@ -9,6 +9,7 @@ namespace TSD2491_OBLIG1_250074.Models
     {
 
         public int MatchesFound = 0;
+        public string gameStatus { get; private set; }       
 
         public MatchingGameModul()
         {
@@ -17,63 +18,60 @@ namespace TSD2491_OBLIG1_250074.Models
 
         static List<string> animalEmoji = new List<string>()
         {
-            "🐶", "🐶", // dog
-			"🐴", "🐴", // horse
-			"🐮", "🐮", // cow
-			"🦊", "🦊", // fox 
-			"😺", "😺", // cat
-			"🦁", "🦁", // lion
-			"🐯", "🐯", // tiger
-			"🐭", "🐭", // mouse
+            "🐶", "🐶", 
+			"🐴", "🐴", 
+			"🐮", "🐮", 
+			"🦊", "🦊",  
+			"😺", "😺", 
+			"🦁", "🦁", 
+			"🐯", "🐯", 
+			"🐭", "🐭", 
 		};
 
         static List<string> signEmoji = new List<string>()
         {
-            "👈", "👈", // backhand
-			"✌️", "✌️",	// vicroty
-			"🖖", "🖖", // vulkan slaute 
-			"🤞", "🤞", // crossed fingers 
-			"👎", "👎", // thumb down
-			"🤌", "🤌", // pinched fingers
-			"👍", "👍", // thumb up 
-			"🤝", "🤝", // handshake
+            "👈", "👈", 
+			"✌️", "✌️",	
+			"🖖", "🖖",  
+			"🤞", "🤞", 
+			"👎", "👎", 
+			"🤌", "🤌", 
+			"👍", "👍",  
+			"🤝", "🤝", 
 		};
 
-        static List<string> randomEmoji = new List<string>()
+        static List<string> coolEmoji = new List<string>()
         {
-            "🎃", "🎃", // gresskar
-			"❌", "❌", // X emoji
-			"⚡", "⚡", // lightning emoji
-			"🚀", "🚀", // rocket
-			"🚁", "🚁", // helicopter
-			"📸", "📸", // camera
-			"🧲", "🧲", // magnet
-			"✂️", "✂️",	// scissors 
+            "🎃", "🎃", 
+			"❌", "❌", 
+			"⚡", "⚡", 
+			"🚀", "🚀", 
+			"🚁", "🚁", 
+			"📸", "📸", 
+			"🧲", "🧲", 
+			"✂️", "✂️",	
 
 		};
 
-        static List<string> fruktEmoji = new List<string>()
+        static List<string> fruitEmoji = new List<string>()
         {
-            "🍒", "🍒", // cherry
-            "🍑", "🍑", // peach
-            "🍉", "🍉", // watermelon
-            "🥝", "🥝", // kiwi
-            "🍌", "🍌", // banana
-            "🍎", "🍎", // red apple
-            "🥥", "🥥", // coconut
-            "🍇", "🍇", // grapes
+            "🍒", "🍒", 
+            "🍑", "🍑", 
+            "🍉", "🍉", 
+            "🥝", "🥝", 
+            "🍌", "🍌", 
+            "🍎", "🍎", 
+            "🥥", "🥥", 
+            "🍇", "🍇", 
         };
 
-        // starten av commit 4
         static Random random = new Random();
         public List<string> shuffledEmoji = pickRandomEmoji();
         static List<string> pickRandomEmoji()
         {
-            // genererer radnom tall mellom 0 og 4, for a velge mellom ett av listene
+            
             int randomIndeks = random.Next(0, 4);
 
-
-            // lager en switch-case for a returnere emojies ut ifra randomIndex
             switch (randomIndeks)
             {
                 case 0:
@@ -83,32 +81,33 @@ namespace TSD2491_OBLIG1_250074.Models
                     return signEmoji = signEmoji.OrderBy(items => random.Next()).ToList();
 
                 case 2:
-                    return randomEmoji = randomEmoji.OrderBy(items => random.Next()).ToList();
+                    return coolEmoji = coolEmoji.OrderBy(items => random.Next()).ToList();
 
                 case 3:
-                    return fruktEmoji = fruktEmoji.OrderBy(items => random.Next()).ToList();
+                    return fruitEmoji = fruitEmoji.OrderBy(items => random.Next()).ToList();
 
                 default:
                     throw new Exception("Invalig Index");
             }
         }
 
-        // commit 4
         private void SetupGame()
         {
             Random random = new Random();
             shuffledEmoji = pickRandomEmoji();
-
             MatchesFound = 0;
         }
 
-
-        // commit 5 - behandling av museklikk pa ikoner(Button)
         string lastAnimalFound = string.Empty;
         string lastDescription = string.Empty;
 
         public void ButtonClick(string animal, string AnimalDescription)
         {
+            if (MatchesFound == 0)
+            {
+                gameStatus = "Game Running";
+            }
+
             if (lastAnimalFound == string.Empty)
             {
                 lastAnimalFound = animal;
@@ -128,15 +127,16 @@ namespace TSD2491_OBLIG1_250074.Models
                 MatchesFound++;
                 if (MatchesFound == 8)
                 {
+                    gameStatus = "Game Complete";
                     SetupGame();
+
                 }
             }
 
             else
             {
-                // resetting lastAnimalFound
                 lastAnimalFound = string.Empty;
             }
         }
     }
-    }
+}
